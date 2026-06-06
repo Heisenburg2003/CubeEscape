@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +9,17 @@ public class PlayerMovement : MonoBehaviour
         InputAction jump; // space for jump
         [SerializeField]
         InputAction left;
-        [SerializeField] 
+        [SerializeField]
         InputAction right;
+        [SerializeField]
+        float airControlForce = 10f;
+        [SerializeField]
+        float airControlDuration = 2f;
+        [SerializeField]
+        float fallMultiplier = 5f;
+
+        float airtimer; 
+        
 
 
         [SerializeField] // to give the value access in the inspector , can change the value in the inspector 
@@ -19,7 +29,12 @@ public class PlayerMovement : MonoBehaviour
         float push = 5f;
 
         Rigidbody rb;
-
+        bool jumpRequest;
+        bool leftKey;
+        bool rightKey;
+        bool isGrounded;
+        
+        
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -28,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.LogError("No rigidbody found!");
             }
+            airtimer = 0f;
         }
 
         private void OnEnable()
@@ -39,30 +55,103 @@ public class PlayerMovement : MonoBehaviour
 
         private void OnDisable()
         {
-            jump.performed -= OnJump;
             jump.Disable();
         }
         
-        private void FixedUpdate()
+        private void Update()
         {
-            if(jump.IsPressed())
+            // if(airtimer > 0)
+            // {
+            //     airtimer -= Time.fixedDeltaTime;
+            
+            if(jump.WasPressedThisFrame())
             {
-                rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
-                Debug.Log("jump!");
+                jumpRequest = true;
+                Debug.Log(jumpRequest);
+                // rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
+                // airtimer = airControlDuration;
+                // Debug.Log("jump!");
+                // Debug.Log(airtimer);
             }
-            if(left.IsPressed())
+            if(left.WasPressedThisFrame())
             {
-                rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
-                Debug.Log("go left!");
+                leftKey = true;
+                // rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
+                // Debug.Log("go left!");
 
             }
-            if(right.IsPressed())
+            if(right.WasPressedThisFrame())
             {
+                rightKey = true;
+                // rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
+                // Debug.Log("go right!");
+            }
+            }
+            
+// }
+        private void FixedUpdate()
+        {
+            if(airtimer > 0)
+            {
+                airtimer -= Time.fixedDeltaTime;
+                
+
+                if(airtimer <= 0)
+            {
+                 airtimer = 0;
+                 Debug.Log(airtimer);
+            }
+
+                if(airtimer < 0 && rb.linearVelocity.y < 0)
+            {
+            rb.AddForce(Vector3.up * Physics.gravity.y * (fallMultiplier - 1),ForceMode.Acceleration );
+            }
+            }
+            if(jumpRequest && isGrounded)
+            {
+                jumpRequest = false;
+                rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
+                airtimer = airControlDuration;
+                Debug.Log("jump!");
+                
+                
+            }
+            if(leftKey && !isGrounded)
+            {
+                leftKey = false;
+                rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
+                Debug.Log("go left!");
+            }
+            if(rightKey && !isGrounded)
+            {
+                rightKey = false;
                 rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
                 Debug.Log("go right!");
             }
+            
         }
 
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if(collision.gameObject.CompareTag("ground"))
+            {
+                isGrounded = true;
+                Debug.Log("is Grounded");
+            }
+        }
+        
+        private void OnCollisionExit(Collision collision)
+        {
+            if(collision.gameObject.CompareTag("ground"))
+            {
+                isGrounded = false;
+                Debug.Log("is not Grounded");
+
+            }
+        }
+
+      
         private void OnJump(InputAction.CallbackContext context)
         {
             Debug.Log("Jump is Pressed!");
