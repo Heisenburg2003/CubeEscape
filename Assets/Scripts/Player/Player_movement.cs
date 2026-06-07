@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -29,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
         bool leftKey;
         bool rightKey;
         bool isGrounded;
+        bool isleftWall;
+        bool isrightWall;
         
         
         private void Awake()
@@ -52,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
         private void OnDisable()
         {
             jump.Disable();
+            left.Disable();
+            right.Disable();
         }
         
         private void Update()
@@ -70,14 +75,14 @@ public class PlayerMovement : MonoBehaviour
                 // Debug.Log("jump!");
                 // Debug.Log(airtimer);
             }
-            if(left.WasPressedThisFrame())
+            if(left.IsPressed() && !isleftWall)
             {
                 leftKey = true;
                 // rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
                 // Debug.Log("go left!");
 
             }
-            if(right.WasPressedThisFrame())
+            if(right.IsPressed() && !isrightWall)
             {
                 rightKey = true;
                 // rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
@@ -114,13 +119,13 @@ public class PlayerMovement : MonoBehaviour
                 
                 
             }
-            if(leftKey && !isGrounded)
+            if(leftKey && !isGrounded  && !isleftWall)
             {
                 leftKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
                 Debug.Log("go left!");
             }
-            if(rightKey && !isGrounded)
+            if(rightKey && !isGrounded && !isrightWall)
             {
                 rightKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
@@ -137,17 +142,38 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = true;
                 Debug.Log("is Grounded");
             }
+            if(collision.gameObject.CompareTag("left wall"))
+            {
+                isleftWall = true;
+                Debug.Log("contact with the left wall");
+            }
+            if(collision.gameObject.CompareTag("right wall"))
+            {
+                isrightWall = true;
+                Debug.Log("contact with the right wall");
+            }
         }
-        
         private void OnCollisionExit(Collision collision)
         {
             if(collision.gameObject.CompareTag("ground"))
             {
                 isGrounded = false;
                 Debug.Log("is not Grounded");
-
+            }
+            if(collision.gameObject.CompareTag("left wall"))
+            {
+                isleftWall = false;
+                Debug.Log("bye bye left wall");
+            }
+            if(collision.gameObject.CompareTag("right wall"))
+            {
+                isrightWall = false;
+                Debug.Log("bye bye right wall");
             }
         }
+
+
+
 
       
         private void OnJump(InputAction.CallbackContext context)
