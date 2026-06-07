@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,17 +12,12 @@ public class PlayerMovement : MonoBehaviour
         InputAction left;
         [SerializeField]
         InputAction right;
-        [SerializeField]
-        float airControlForce = 10f;
+        
         [SerializeField]
         float airControlDuration = 2f;
         [SerializeField]
         float fallMultiplier = 5f;
-
         float airtimer; 
-        
-
-
         [SerializeField] // to give the value access in the inspector , can change the value in the inspector 
         float jumpForce = 5f;
 
@@ -64,9 +60,10 @@ public class PlayerMovement : MonoBehaviour
             // {
             //     airtimer -= Time.fixedDeltaTime;
             
-            if(jump.WasPressedThisFrame())
+            if(jump.WasPressedThisFrame() && isGrounded)
             {
                 jumpRequest = true;
+
                 Debug.Log(jumpRequest);
                 // rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
                 // airtimer = airControlDuration;
@@ -109,7 +106,8 @@ public class PlayerMovement : MonoBehaviour
             }
             if(jumpRequest && isGrounded)
             {
-                jumpRequest = false;
+                jumpRequest = false; //key request reset 
+                isGrounded = false;
                 rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
                 airtimer = airControlDuration;
                 Debug.Log("jump!");
@@ -118,13 +116,13 @@ public class PlayerMovement : MonoBehaviour
             }
             if(leftKey && !isGrounded)
             {
-                leftKey = false;
+                leftKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
                 Debug.Log("go left!");
             }
             if(rightKey && !isGrounded)
             {
-                rightKey = false;
+                rightKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
                 Debug.Log("go right!");
             }
