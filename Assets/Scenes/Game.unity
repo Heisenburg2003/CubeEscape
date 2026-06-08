@@ -134,8 +134,8 @@ GameObject:
   - component: {fileID: 283585361}
   - component: {fileID: 283585360}
   m_Layer: 0
-  m_Name: Pipe (1)
-  m_TagString: Untagged
+  m_Name: right wall
+  m_TagString: right wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1010,12 +1010,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283585359}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.99, y: 7.34, z: -11.97}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -58.9395, y: 7.34, z: -8.22741}
   m_LocalScale: {x: 1.0471, y: 3.7393382, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1448585692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
@@ -1799,6 +1799,39 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1448585691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1448585692}
+  m_Layer: 0
+  m_Name: Walls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1448585692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448585691}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 48.9495, y: 0, z: -3.74259}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1906809995}
+  - {fileID: 283585365}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1479769261
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,11 +1916,10 @@ MonoBehaviour:
       m_Action: Right
       m_Flags: 0
     m_Flags: 0
-  airControlForce: 10
   airControlDuration: 2
   fallMultiplier: 5
-  jumpForce: 50
-  push: 25
+  jumpForce: 100
+  push: 6
 --- !u!65 &1479769263
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2023,8 +2055,8 @@ GameObject:
   - component: {fileID: 1906809991}
   - component: {fileID: 1906809990}
   m_Layer: 0
-  m_Name: Pipe
-  m_TagString: Untagged
+  m_Name: left wall
+  m_TagString: left wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2899,12 +2931,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906809989}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.01, y: 7.34, z: 2.62}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -58.959503, y: 7.34, z: 6.36259}
   m_LocalScale: {x: 1.0471, y: 4.3355865, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1448585692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -2914,6 +2946,5 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1479769266}
-  - {fileID: 1906809995}
-  - {fileID: 283585365}
   - {fileID: 380891211}
+  - {fileID: 1448585692}
