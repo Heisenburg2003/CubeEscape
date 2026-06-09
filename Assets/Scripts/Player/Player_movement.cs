@@ -61,9 +61,6 @@ public class PlayerMovement : MonoBehaviour
         
         private void Update()
         {
-            // if(airtimer > 0)
-            // {
-            //     airtimer -= Time.fixedDeltaTime;
             
             if(jump.WasPressedThisFrame() && isGrounded)
             {
@@ -90,18 +87,17 @@ public class PlayerMovement : MonoBehaviour
             }
             }
             
-// }
+
         private void FixedUpdate()
         {
             if(airtimer > 0)
             {
                 airtimer -= Time.fixedDeltaTime;
+                Debug.Log(airtimer);
                 
-
                 if(airtimer <= 0)
             {
                  airtimer = 0;
-                 Debug.Log(airtimer);
             }
 
                 if(airtimer < 0 && rb.linearVelocity.y < 0)
