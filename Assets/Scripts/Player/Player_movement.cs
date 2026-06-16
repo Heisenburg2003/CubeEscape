@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player{
+namespace Player{   
 public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] // to give the value access in the inspector , can change the value in the inspector 
@@ -32,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
         bool isGrounded;
         bool isleftWall;
         bool isrightWall;
+        int jumpdirection;
+        float targetRotationX;
+        float rotationSpeed = 720f;
+        
+      
         
         
         private void Awake()
@@ -67,40 +72,37 @@ public class PlayerMovement : MonoBehaviour
                 jumpRequest = true;
 
                 Debug.Log(jumpRequest);
-                // rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
-                // airtimer = airControlDuration;
-                // Debug.Log("jump!");
-                // Debug.Log(airtimer);
+                
             }
             if(left.IsPressed() && !isleftWall)
             {
                 leftKey = true;
-                // rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
-                // Debug.Log("go left!");
+                jumpdirection = -1;
+                
 
             }
             if(right.IsPressed() && !isrightWall)
             {
                 rightKey = true;
-                // rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
-                // Debug.Log("go right!");
+                jumpdirection = 1;
             }
-            }
+            transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.Euler(targetRotationX,0,0),rotationSpeed * Time.deltaTime);
+        }
             
 
         private void FixedUpdate()
         {
-            if(airtimer > 0)
+            if(airtimer > 0 )
             {
                 airtimer -= Time.fixedDeltaTime;
                 Debug.Log(airtimer);
                 
-                if(airtimer <= 0)
-            {
+                if(airtimer < 0)
+                {
                  airtimer = 0;
-            }
+                }
 
-                if(airtimer < 0 && rb.linearVelocity.y < 0)
+            if(airtimer < 0 && rb.linearVelocity.y < 0 ) //disable wall sliding when in contact with the wall
             {
             rb.AddForce(Vector3.up * Physics.gravity.y * (fallMultiplier - 1),ForceMode.Acceleration );
             }
@@ -112,9 +114,17 @@ public class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
                 airtimer = airControlDuration;
                 Debug.Log("jump!");
-                
-                
+
+                if(jumpdirection == -1)
+                {
+                targetRotationX += 90f;
+                }
+                if(jumpdirection == 1)
+                {
+                targetRotationX -= 90f;
+                }
             }
+
             if(leftKey && !isGrounded  && !isleftWall)
             {
                 leftKey = false;  //key request reset
