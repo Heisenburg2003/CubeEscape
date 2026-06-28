@@ -7,25 +7,19 @@ using UnityEngine.InputSystem;
 namespace Player{   
 public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField] // to give the value access in the inspector , can change the value in the inspector 
-        InputAction jump; // space for jump
-        [SerializeField]
-        InputAction left;
-        [SerializeField]
-        InputAction right;
-        
-        [SerializeField]
-        float airControlDuration = 2f;
-        [SerializeField]
-        float fallMultiplier = 5f;
+        [SerializeField] InputAction jump; // space for jump
+        [SerializeField] InputAction left;
+        [SerializeField] InputAction right; 
+        [SerializeField] float fallMultiplier = 5f;
         float airtimer; 
-        [SerializeField] // to give the value access in the inspector , can change the value in the inspector 
-        float jumpForce = 5f;
-
-        [SerializeField]
-        float push = 5f;
+        [SerializeField] float jumpForce = 5f;
+        [SerializeField] private float holdForce = 15f;
+        [SerializeField] private float maxHoldTime = 0.2f;
+        [SerializeField] float push = 5f;
 
         Rigidbody rb;
+        private float holdTimer;
+        private bool isHoldingJump;
         bool jumpRequest;
         bool leftKey;
         bool rightKey;
@@ -74,6 +68,11 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log(jumpRequest);
                 
             }
+            if (jump.WasReleasedThisFrame())
+            {
+                isHoldingJump = false;
+            }
+            if(isGrounded){
             if(left.IsPressed() && !isleftWall)
             {
                 leftKey = true;
@@ -86,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
                 rightKey = true;
                 jumpdirection = 1;
             }
+            }
             transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.Euler(targetRotationX,0,0),rotationSpeed * Time.deltaTime);
         }
             
@@ -95,47 +95,70 @@ public class PlayerMovement : MonoBehaviour
             if(airtimer > 0 )
             {
                 airtimer -= Time.fixedDeltaTime;
-                Debug.Log(airtimer);
                 
                 if(airtimer < 0)
                 {
                  airtimer = 0;
                 }
-
-            if(airtimer < 0 && rb.linearVelocity.y < 0 ) //disable wall sliding when in contact with the wall
+            }
+            if(airtimer <= 0 && rb.linearVelocity.y < 0 ) //initiate heavy fall 
             {
-            rb.AddForce(Vector3.up * Physics.gravity.y * (fallMultiplier - 1),ForceMode.Acceleration );
+             rb.AddForce(Vector3.up * Physics.gravity.y * (fallMultiplier - 1),ForceMode.Acceleration ); 
             }
-            }
+
             if(jumpRequest && isGrounded)
             {
                 jumpRequest = false; //key request reset 
                 isGrounded = false;
                 rb.AddForce(Vector3.up* jumpForce,ForceMode.Impulse);
-                airtimer = airControlDuration;
-                Debug.Log("jump!");
+
+                isHoldingJump = true;
+                holdTimer = maxHoldTime;
+                // Debug.Log("jump!");
 
                 if(jumpdirection == -1)
                 {
                 targetRotationX += 90f;
+                Debug.Log("Target Rotation: " + targetRotationX);
+
                 }
                 if(jumpdirection == 1)
                 {
                 targetRotationX -= 90f;
-                }
-            }
+                Debug.Log("Target Rotation: " + targetRotationX);
+
+                }   
+            }           
+                    
+
+            if (isHoldingJump)
+{
+    if (jump.IsPressed() &&
+        holdTimer > 0f &&
+        rb.linearVelocity.y > 0f)
+    {
+        rb.AddForce(Vector3.up * holdForce, ForceMode.Acceleration);
+        holdTimer -= Time.fixedDeltaTime;
+    }
+
+    if (holdTimer <= 0f || !jump.IsPressed())
+    {
+        isHoldingJump = false;
+    }
+}
+            
 
             if(leftKey && !isGrounded  && !isleftWall)
             {
                 leftKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,1)*push,ForceMode.Impulse);
-                Debug.Log("go left!");
+                // Debug.Log("go left!");
             }
             if(rightKey && !isGrounded && !isrightWall)
             {
                 rightKey = false;  //key request reset
                 rb.AddForce(new Vector3(0,0,-1)*push,ForceMode.Impulse);
-                Debug.Log("go right!");
+                // Debug.Log("go right!");
             }
             
         }
@@ -146,17 +169,17 @@ public class PlayerMovement : MonoBehaviour
             if(collision.gameObject.CompareTag("ground"))
             {
                 isGrounded = true;
-                Debug.Log("is Grounded");
+                // Debug.Log("is Grounded");
             }
             if(collision.gameObject.CompareTag("left wall"))
             {
                 isleftWall = true;
-                Debug.Log("contact with the left wall");
+                // Debug.Log("contact with the left wall");
             }
             if(collision.gameObject.CompareTag("right wall"))
             {
                 isrightWall = true;
-                Debug.Log("contact with the right wall");
+                // Debug.Log("contact with the right wall");
             }
         }
         private void OnCollisionExit(Collision collision)
@@ -164,17 +187,17 @@ public class PlayerMovement : MonoBehaviour
             if(collision.gameObject.CompareTag("ground"))
             {
                 isGrounded = false;
-                Debug.Log("is not Grounded");
+                // Debug.Log("is not Grounded");
             }
             if(collision.gameObject.CompareTag("left wall"))
             {
                 isleftWall = false;
-                Debug.Log("bye bye left wall");
+                // Debug.Log("bye bye left wall");
             }
             if(collision.gameObject.CompareTag("right wall"))
             {
                 isrightWall = false;
-                Debug.Log("bye bye right wall");
+                // Debug.Log("bye bye right wall");
             }
         }
 
