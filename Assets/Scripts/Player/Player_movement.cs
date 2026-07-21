@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
             }           
                     
 
-            if (isHoldingJump)
+if (isHoldingJump)
 {
     if (jump.IsPressed() &&
         holdTimer > 0f &&

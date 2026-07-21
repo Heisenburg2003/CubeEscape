@@ -7,6 +7,7 @@ TagManager:
   - ground
   - left wall
   - right wall
+  - launcher
   layers:
   - Default
   - TransparentFX
