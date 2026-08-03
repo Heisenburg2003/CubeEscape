@@ -3,12 +3,7 @@ using UnityEngine;
 public class lavaMovement : MonoBehaviour
 {
     [SerializeField] private float lavaSpeed = 15f;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         transform.position += Vector3.up * lavaSpeed * Time.deltaTime;
@@ -18,7 +13,15 @@ public class lavaMovement : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log("Player Died");
+            PlayerDeath playerDeath = other.GetComponent<PlayerDeath>();
+
+            if (playerDeath != null)
+            {
+                playerDeath.Die();
+
+            }
+             Debug.Log("Player made contact with lava");
+        
         }
     }
 }

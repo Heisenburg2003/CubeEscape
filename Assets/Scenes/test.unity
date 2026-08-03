@@ -153,6 +153,23 @@ Transform:
   - {fileID: 1402202809}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &139084432 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9092138573004435826, guid: 444ef86aedc91b44fb1fc715920ea58e, type: 3}
+  m_PrefabInstance: {fileID: 6209605947073487818}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &139084433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139084432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9eb603b6e0335b49a2bfaeaabd678f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
 --- !u!4 &283585365 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 860485589120659827, guid: f55e75f485c733a47b595765905960bb, type: 3}
@@ -6043,6 +6060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1877095695}
   - component: {fileID: 1877095694}
+  - component: {fileID: 1877095696}
   m_Layer: 0
   m_Name: steam hazard
   m_TagString: Untagged
@@ -6063,6 +6081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteamHazard
   steamEffect: {fileID: 753794737}
+  damageCollider: {fileID: 1877095696}
   activeTime: 3.5
   inactiveTime: 3
   startDelay: 0
@@ -6082,6 +6101,27 @@ Transform:
   - {fileID: 753794740}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1877095696
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877095693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 9.461315, z: 1}
+  m_Center: {x: 0, y: 4.2306585, z: 0}
 --- !u!4 &1895580491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5886656431912653785, guid: 0ad1bf6675dbc904b8b8c34458905f3f, type: 3}
@@ -6350,7 +6390,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9092138573004435826, guid: 444ef86aedc91b44fb1fc715920ea58e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 139084433}
   m_SourcePrefab: {fileID: 100100000, guid: 444ef86aedc91b44fb1fc715920ea58e, type: 3}
 --- !u!1001 &7401160673643499053
 PrefabInstance:
